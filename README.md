@@ -1,3 +1,14 @@
+# Exploring Design Systems
+
+## Components
+
+- Tabs
+
+## Roadmap (sort of)
+
+- [x] Tabs: navigation with arrow keys
+- [ ] A11y: make sure Tabs are accessible (keyboard navigation, mobile, screen reader).
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
