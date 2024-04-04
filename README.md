@@ -9,6 +9,11 @@
 - [x] Tabs: navigation with arrow keys
 - [ ] A11y: make sure Tabs are accessible (keyboard navigation, mobile, screen reader).
 
+## Publishing
+
+- `npm run build`
+- `npm publish --access public`
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
