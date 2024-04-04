@@ -6,10 +6,10 @@ export type ContentProps = {
 } & React.HTMLAttributes<HTMLDivElement>
 
 export function Content(props: PropsWithChildren<ContentProps>) {
-  const { value } = useContext(TabContext)
+  const { selectedValue } = useContext(TabContext)
 
   return (
-    <div {...props} hidden={value !== props.value}>
+    <div {...props} hidden={selectedValue !== props.value}>
       {props.children}
     </div>
   )
