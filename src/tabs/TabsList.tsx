@@ -12,5 +12,9 @@ export const StyledTabsList = styled.ul`
 `
 
 export function List(props: PropsWithChildren<ListProps>) {
-  return <StyledTabsList {...props}>{props.children}</StyledTabsList>
+  return (
+    <StyledTabsList {...props} role="tablist">
+      {props.children}
+    </StyledTabsList>
+  )
 }

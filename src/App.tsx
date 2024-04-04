@@ -10,7 +10,7 @@ function App() {
       <Button variant="secondary">Secondary</Button>
       <hr />
       <h2>Tabs</h2>
-      <Tabs.Root className="TabsRoot" defaultValue="tab1">
+      <Tabs.Root className="TabsRoot">
         <Tabs.List className="TabsList" aria-label="Manage your account">
           <Tabs.Trigger className="TabsTrigger" value="tab1">
             Account

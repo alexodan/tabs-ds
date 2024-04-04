@@ -18,6 +18,10 @@ const StyledTrigger = styled.li`
     cursor: pointer;
   }
 
+  button:active {
+    outline: 2px solid blue;
+  }
+
   button[aria-selected='true'] {
     border-bottom: 2px solid teal;
   }
@@ -61,6 +65,7 @@ export function Trigger(props: PropsWithChildren<TriggerProps>) {
     }
   }
 
+  const tabNumber = tabs.findIndex(tab => tab.value === props.value) + 1
   const isFirstTab = tabs[0]?.value === props.value
   const isLastTab = tabs[tabs.length - 1]?.value === props.value
 
@@ -74,6 +79,8 @@ export function Trigger(props: PropsWithChildren<TriggerProps>) {
           onTriggerClick(props.value)
         }}
         aria-selected={selectedValue === props.value}
+        role="tab"
+        aria-controls={`content-tab-${tabNumber}`}
         tabIndex={selectedValue ? (selectedValue === props.value ? 0 : -1) : 0}
         onKeyDown={handleKeyDown}
       >

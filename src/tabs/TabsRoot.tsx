@@ -1,4 +1,10 @@
-import { createContext, PropsWithChildren, useCallback, useState } from 'react'
+import {
+  createContext,
+  PropsWithChildren,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react'
 
 export type RootProps = {
   defaultValue?: string
@@ -64,28 +70,35 @@ export function Root(props: PropsWithChildren<RootProps>) {
         tab.triggerRef.focus()
       }
     },
-    [tabs]
+    [tabs],
   )
 
-  // TODO: use useEffect to grab first value from children
+  // Set the first tab as the default tab
+  useEffect(() => {
+    if (tabs.length > 0 && !tabValue && !props.defaultValue) {
+      const firstTab = tabs[0]
+      setTabValue(firstTab.value)
+    }
+  }, [tabs, tabValue, props.defaultValue])
+
   const selectedValue = tabValue || props.defaultValue || ''
 
+  console.log('Root', selectedValue)
+
   return (
-    <div {...props}>
-      <TabContext.Provider
-        value={{
-          selectedValue,
-          setValue: setTabValue,
-          onTriggerClick: handleTriggerClick,
-          tabs,
-          setTabs,
-          registerTab,
-          deRegisterTab,
-          changeFocus,
-        }}
-      >
-        {props.children}
-      </TabContext.Provider>
-    </div>
+    <TabContext.Provider
+      value={{
+        selectedValue,
+        setValue: setTabValue,
+        onTriggerClick: handleTriggerClick,
+        tabs,
+        setTabs,
+        registerTab,
+        deRegisterTab,
+        changeFocus,
+      }}
+    >
+      <div {...props}>{props.children}</div>
+    </TabContext.Provider>
   )
 }
