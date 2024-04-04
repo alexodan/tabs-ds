@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useContext } from 'react'
+import { PropsWithChildren, forwardRef, useContext } from 'react'
 import { TabContext } from '.'
 
 type TabsContentElement = React.ElementRef<'div'>
@@ -7,7 +7,7 @@ export type ContentProps = {
   value: string
 } & React.HTMLAttributes<HTMLDivElement>
 
-export const Content = React.forwardRef<TabsContentElement, ContentProps>(
+export const Content = forwardRef<TabsContentElement, ContentProps>(
   (props: PropsWithChildren<ContentProps>, forwardedRef) => {
     const { selectedValue, tabs } = useContext(TabContext)
 
