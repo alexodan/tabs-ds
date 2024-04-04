@@ -1,10 +1,20 @@
-import { PropsWithChildren, useContext, useEffect, useRef } from 'react'
+import {
+  PropsWithChildren,
+  PropsWithoutRef,
+  forwardRef,
+  useContext,
+  useEffect,
+  useRef,
+} from 'react'
 import { TabContext } from '.'
 import styled from 'styled-components'
 
-export type TriggerProps = {
+type TabsTriggerElement = React.ElementRef<'button'>
+type ButtonProps = PropsWithoutRef<React.ComponentProps<'button'>>
+
+interface TabsTriggerProps extends ButtonProps {
   value: string
-} & React.HTMLAttributes<HTMLLIElement>
+}
 
 const StyledTrigger = styled.li`
   display: inline-block;
@@ -22,12 +32,19 @@ const StyledTrigger = styled.li`
     outline: 2px solid blue;
   }
 
+  button:focus {
+    outline: 2px solid blue;
+  }
+
   button[aria-selected='true'] {
     border-bottom: 2px solid teal;
   }
 `
 
-export function Trigger(props: PropsWithChildren<TriggerProps>) {
+export const Trigger = forwardRef<
+  TabsTriggerElement,
+  PropsWithChildren<TabsTriggerProps>
+>((props, forwardedRef) => {
   const {
     selectedValue,
     tabs,
@@ -37,9 +54,10 @@ export function Trigger(props: PropsWithChildren<TriggerProps>) {
     changeFocus,
   } = useContext(TabContext)
 
-  const buttonRef = useRef<HTMLButtonElement>(
-    null
-  ) as React.MutableRefObject<HTMLButtonElement>
+  const { disabled = false, value, ...rest } = props
+
+  const buttonRef = (forwardedRef ??
+    useRef<HTMLButtonElement>()) as React.MutableRefObject<HTMLButtonElement>
 
   useEffect(() => {
     const node = buttonRef.current
@@ -50,17 +68,26 @@ export function Trigger(props: PropsWithChildren<TriggerProps>) {
     }
   }, [props.value, registerTab, deRegisterTab])
 
+  // TODO: when tab is disabled, focus should skip over it, now is just stuck
   const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
     if (event.key === 'ArrowRight') {
-      const nextTab = tabs.findIndex(tab => tab.value === props.value) + 1
-      if (nextTab < tabs.length) {
-        changeFocus(tabs[nextTab].value)
+      const rightTabs = tabs.slice(
+        tabs.findIndex(tab => tab.value === props.value) + 1,
+      )
+      const firstEnabledTab = rightTabs.find(tab => !tab.triggerRef?.disabled)
+      if (firstEnabledTab) {
+        changeFocus(firstEnabledTab.value)
       }
-    }
-    if (event.key === 'ArrowLeft') {
-      const prevTab = tabs.findIndex(tab => tab.value === props.value) - 1
-      if (prevTab >= 0) {
-        changeFocus(tabs[prevTab].value)
+    } else if (event.key === 'ArrowLeft') {
+      const leftTabs = tabs.slice(
+        0,
+        tabs.findIndex(tab => tab.value === props.value),
+      )
+      const firstEnabledTab = leftTabs
+        .reverse()
+        .find(tab => !tab.triggerRef?.disabled)
+      if (firstEnabledTab) {
+        changeFocus(firstEnabledTab.value)
       }
     }
   }
@@ -72,8 +99,10 @@ export function Trigger(props: PropsWithChildren<TriggerProps>) {
   console.log('Trigger', props.value, isFirstTab, isLastTab)
 
   return (
-    <StyledTrigger {...props}>
+    <StyledTrigger>
       <button
+        {...rest}
+        disabled={disabled}
         ref={buttonRef}
         onClick={() => {
           onTriggerClick(props.value)
@@ -88,4 +117,4 @@ export function Trigger(props: PropsWithChildren<TriggerProps>) {
       </button>
     </StyledTrigger>
   )
-}
+})

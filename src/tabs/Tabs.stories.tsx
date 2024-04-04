@@ -8,7 +8,9 @@ export const Primary = {
     <Tabs.Root className="TabsRoot">
       <Tabs.List className="TabsList" aria-label="tabs example">
         <Tabs.Trigger value="tab1">Tab 1</Tabs.Trigger>
-        <Tabs.Trigger value="tab2">Tab 2</Tabs.Trigger>
+        <Tabs.Trigger disabled value="tab2">
+          <span>Tab 2</span>
+        </Tabs.Trigger>
         <Tabs.Trigger value="tab3">Tab 3</Tabs.Trigger>
       </Tabs.List>
       <Tabs.Content value="tab1">
